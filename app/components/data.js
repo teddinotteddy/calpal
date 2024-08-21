@@ -100,7 +100,14 @@ export default function DataTable({ goal }) {
               <p>Calories: {totals.calories}</p>
               <p>Protein: {totals.protein}g</p>
               <p>Carbs: {totals.carbs}g</p>
-              {goal && <Progress value={Math.min(progressPercentage, 100)} />}
+              {goal && (
+                <div>
+                  <p className="pt-2 font-medium">
+                    {totals.calories} / {goal.value}
+                  </p>
+                  <Progress value={Math.min(progressPercentage, 100)} />
+                </div>
+              )}
             </CardContent>
           </Card>
           <div className="flex justify-center">

@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { setLimit } from "../actions";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -16,6 +17,7 @@ import { useToast } from "@/components/ui/use-toast";
 
 export default function Goal() {
   const { toast } = useToast();
+  const router = useRouter();
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -27,6 +29,8 @@ export default function Goal() {
         title: "Success",
         description: "Goal/Limit set successfully.",
       });
+
+      router.refresh();
     } else {
       toast({
         title: "Error",

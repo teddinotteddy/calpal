@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { addEntry } from "../actions";
 import { useToast } from "@/components/ui/use-toast";
 import { Input } from "@/components/ui/input";
@@ -15,6 +16,7 @@ import {
 
 export default function Entries() {
   const { toast } = useToast();
+  const router = useRouter();
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -26,6 +28,8 @@ export default function Entries() {
         title: "Success",
         description: "Entry added.",
       });
+
+      router.refresh();
     } else {
       toast({
         title: "Error",
