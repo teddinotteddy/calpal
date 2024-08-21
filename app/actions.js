@@ -2,6 +2,9 @@
 
 import { db } from "@/auth";
 import { entries } from "@/schema";
+import { lucia } from "@/auth";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import { validateRequest } from "@/validate-request";
 import { and, eq, gte, lt } from "drizzle-orm";
 
@@ -34,6 +37,24 @@ export async function getEntries(date) {
   }
 }
 
+export async function addEntry(formData) {
+  const { user } = await validateRequest();
+
+  try {
+    await db.insert(entries).values({
+      userId: user.id,
+      calories: formData.get("calories"),
+      protein: formData.get("protein"),
+      carbs: formData.get("carbs"),
+      timestamp: new Date(),
+    });
+
+    return { success: true };
+  } catch (error) {
+    return { error: "Failed to add entry." };
+  }
+}
+
 export async function deleteEntry(entryId) {
   const { user } = await validateRequest();
 
@@ -54,4 +75,23 @@ export async function deleteEntry(entryId) {
     console.log(error);
     return { success: false, error: "Failed to delete entry" };
   }
+}
+
+export async function logout() {
+  const { session } = await validateRequest();
+
+  if (!session) {
+    redirect("/");
+  }
+
+  await lucia.invalidateSession(session.id);
+
+  const sessionCookie = lucia.createBlankSessionCookie();
+  cookies().set(
+    sessionCookie.name,
+    sessionCookie.value,
+    sessionCookie.attributes,
+  );
+
+  return redirect("/");
 }

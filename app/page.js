@@ -1,6 +1,6 @@
 import { validateRequest } from "@/validate-request";
-import DataTable from "./data/data";
-import Entries from "./entries/entries";
+import DataTable from "./components/data";
+import Entries from "./components/entries";
 
 export default async function Home() {
   const { user } = await validateRequest();

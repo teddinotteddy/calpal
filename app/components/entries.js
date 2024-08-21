@@ -1,6 +1,6 @@
 "use client";
 
-import { addEntry } from "./actions";
+import { addEntry } from "../actions";
 import { useToast } from "@/components/ui/use-toast";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";

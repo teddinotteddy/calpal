@@ -1,5 +1,6 @@
 import { validateRequest } from "@/validate-request";
-import Logout from "../logout/logout";
+import Logout from "../components/logout";
+import Delete from "../components/delete";
 
 export default async function Account() {
   const { user } = await validateRequest();
@@ -10,6 +11,9 @@ export default async function Account() {
         Account: {user.username}
       </h1>
       <Logout />
+      <div className="flex justify-center">
+        <Delete userId={user.id} />
+      </div>
     </div>
   );
 }
