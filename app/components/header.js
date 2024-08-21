@@ -19,8 +19,8 @@ export default async function Header() {
             <Button className="text-lg p-4">Signup</Button>
           </Link>
         ) : (
-          <Link href="/logout">
-            <Button className="text-lg p-4">Logout</Button>
+          <Link href="/account">
+            <Button className="text-lg p-4">Account</Button>
           </Link>
         )}
       </div>
