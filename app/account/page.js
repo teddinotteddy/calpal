@@ -1,12 +1,14 @@
 import { validateRequest } from "@/validate-request";
 import Logout from "../logout/logout";
 
-export default function Account() {
-  const { user } = validateRequest();
+export default async function Account() {
+  const { user } = await validateRequest();
 
   return (
-    <div>
-      <h1>Account: {user.username}</h1>
+    <div className="space-y-2">
+      <h1 className="text-center text-lg font-semibold">
+        Account: {user.username}
+      </h1>
       <Logout />
     </div>
   );
