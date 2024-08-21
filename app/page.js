@@ -3,6 +3,8 @@ import DataTable from "./data/data";
 import Entries from "./entries/entries";
 
 export default async function Home() {
+  const { user } = await validateRequest();
+
   return (
     <div className="text-center p-2">
       {user ? (
