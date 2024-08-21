@@ -10,8 +10,6 @@ export default async function Home() {
     var goal = await getUserGoal(user.id);
   }
 
-  console.log(goal.goal);
-
   return (
     <div className="text-center p-2">
       {user ? (
