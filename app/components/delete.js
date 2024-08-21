@@ -10,21 +10,27 @@ export default function Delete({ userId }) {
   const router = useRouter();
 
   async function handleDelete() {
-    const result = await deleteUser(userId);
+    const confirmed = window.confirm(
+      "Are you sure you want to delete your account? All account data will be permanently deleted.",
+    );
 
-    if (result.success) {
-      toast({
-        title: "Success",
-        description: "Account deleted.",
-      });
+    if (confirmed) {
+      const result = await deleteUser(userId);
 
-      router.push("/");
-    } else {
-      toast({
-        title: "Error",
-        description: result.error,
-        variant: "destructive",
-      });
+      if (result.success) {
+        toast({
+          title: "Success",
+          description: "Account deleted.",
+        });
+
+        router.push("/");
+      } else {
+        toast({
+          title: "Error",
+          description: result.error,
+          variant: "destructive",
+        });
+      }
     }
   }
 

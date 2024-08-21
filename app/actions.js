@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/auth";
-import { entries } from "@/schema";
+import { entries, users } from "@/schema";
 import { lucia } from "@/auth";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
@@ -51,6 +51,7 @@ export async function addEntry(formData) {
 
     return { success: true };
   } catch (error) {
+    console.log(error);
     return { error: "Failed to add entry." };
   }
 }
@@ -94,4 +95,55 @@ export async function logout() {
   );
 
   return redirect("/");
+}
+
+export async function setLimit(formData) {
+  const { user } = await validateRequest();
+
+  const isLimit = formData.get("limit") === "true";
+  const value = formData.get("value");
+
+  if (!value || isNaN(Number(value))) {
+    return { error: "Please provide a valid number for the goal/limit." };
+  }
+
+  try {
+    await db
+      .update(users)
+      .set({
+        goal: {
+          limit: isLimit,
+          value: Number(value),
+        },
+      })
+      .where(eq(users.id, user.id));
+
+    return { success: true, message: "Goal/limit set successfully." };
+  } catch (error) {
+    console.error("Error setting goal/limit:", error);
+    return { error: "Failed to set goal/limit." };
+  }
+}
+
+export async function getUserGoal(userId) {
+  const { user } = await validateRequest();
+
+  if (user.id !== userId) {
+    return { error: "Unauthorized access. You can only view your own goal." };
+  }
+
+  try {
+    const userRecord = await db
+      .select()
+      .from(users)
+      .where(eq(users.id, userId));
+
+    if (userRecord.length === 0) {
+      return { error: "User not found." };
+    }
+
+    return { success: true, goal: userRecord[0].goal };
+  } catch (error) {
+    return { error: "Failed to fetch user goal." };
+  }
 }

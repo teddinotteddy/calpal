@@ -1,16 +1,23 @@
 import { validateRequest } from "@/validate-request";
 import DataTable from "./components/data";
 import Entries from "./components/entries";
+import { getUserGoal } from "./actions";
 
 export default async function Home() {
   const { user } = await validateRequest();
+
+  if (user) {
+    var goal = await getUserGoal(user.id);
+  }
+
+  console.log(goal.goal);
 
   return (
     <div className="text-center p-2">
       {user ? (
         <div className="space-y-4">
           <Entries />
-          <DataTable />
+          <DataTable goal={goal.goal} />
         </div>
       ) : (
         <div className="text-center">

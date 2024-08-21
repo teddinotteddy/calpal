@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { getEntries, deleteEntry } from "../actions";
+import { Progress } from "@/components/ui/progress";
 import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
 import {
@@ -21,7 +22,7 @@ import {
 } from "@/components/ui/card";
 import { Cross2Icon } from "@radix-ui/react-icons";
 
-export default function DataTable() {
+export default function DataTable({ goal }) {
   const [date, setDate] = useState(new Date());
   const [entries, setEntries] = useState(undefined);
   const [loading, setLoading] = useState(true);
@@ -63,6 +64,14 @@ export default function DataTable() {
         )
       : { calories: 0, protein: 0, carbs: 0 };
 
+  const progressPercentage = goal
+    ? goal.limit
+      ? (totals.calories / goal.value) * 100
+      : totals.calories < goal.value
+        ? (totals.calories / goal.value) * 100
+        : (goal.value / totals.calories) * 100
+    : 0;
+
   return (
     <div>
       <div>
@@ -91,6 +100,7 @@ export default function DataTable() {
               <p>Calories: {totals.calories}</p>
               <p>Protein: {totals.protein}g</p>
               <p>Carbs: {totals.carbs}g</p>
+              {goal && <Progress value={Math.min(progressPercentage, 100)} />}
             </CardContent>
           </Card>
           <div className="flex justify-center">
