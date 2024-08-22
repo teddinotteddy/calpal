@@ -40,18 +40,33 @@ export async function getEntries(date) {
 export async function addEntry(formData) {
   const { user } = await validateRequest();
 
+  const calories = parseInt(formData.get("calories"));
+  const protein = parseInt(formData.get("protein"));
+  const carbs = parseInt(formData.get("carbs"));
+
+  if (
+    isNaN(calories) ||
+    isNaN(protein) ||
+    isNaN(carbs) ||
+    !Number.isInteger(Number(calories)) ||
+    Number(calories) < 0
+  ) {
+    return {
+      error: "Please provide valid values for calories, protein, and carbs.",
+    };
+  }
+
   try {
     await db.insert(entries).values({
       userId: user.id,
-      calories: formData.get("calories"),
-      protein: formData.get("protein"),
-      carbs: formData.get("carbs"),
+      calories: Number(calories),
+      protein: Number(protein),
+      carbs: Number(carbs),
       timestamp: new Date(),
     });
 
     return { success: true };
   } catch (error) {
-    console.log(error);
     return { error: "Failed to add entry." };
   }
 }

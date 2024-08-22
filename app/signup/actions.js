@@ -14,6 +14,18 @@ export async function signup(formData) {
     typeof username !== "string" ||
     username.length < 3 ||
     username.length > 31 ||
+    !/^[a-z0-9_-]+$/.test(username) ||
+    /[A-Z]/.test(username)
+  ) {
+    return {
+      error: "Username cannot contain capital letters.",
+    };
+  }
+
+  if (
+    typeof username !== "string" ||
+    username.length < 3 ||
+    username.length > 31 ||
     !/^[a-z0-9_-]+$/.test(username)
   ) {
     return {

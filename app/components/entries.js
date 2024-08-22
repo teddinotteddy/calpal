@@ -49,11 +49,26 @@ export default function Entries() {
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-2">
             <Label>Calories</Label>
-            <Input type="number" name="calories" placeholder="0" />
+            <Input
+              type="number"
+              name="calories"
+              placeholder="0"
+              defaultValue={0}
+            />
             <Label>Protein (g)</Label>
-            <Input type="number" name="protein" placeholder="0" />
+            <Input
+              type="number"
+              name="protein"
+              placeholder="0"
+              defaultValue={0}
+            />
             <Label>Carbs (g)</Label>
-            <Input type="number" name="carbs" placeholder="0" />
+            <Input
+              type="number"
+              name="carbs"
+              placeholder="0"
+              defaultValue={0}
+            />
             <Button type="submit">Add</Button>
           </form>
         </CardContent>
