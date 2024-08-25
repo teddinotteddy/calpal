@@ -23,21 +23,29 @@ import {
 import { Cross2Icon } from "@radix-ui/react-icons";
 
 export default function DataTable({ goal }) {
-  const [date, setDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const [entries, setEntries] = useState(undefined);
   const [loading, setLoading] = useState(true);
+
+  const getDateRange = (date) => {
+    const start = new Date(date);
+    start.setHours(0, 0, 0, 0);
+    const end = new Date(date);
+    end.setHours(23, 59, 59, 999);
+    return { start, end };
+  };
 
   useEffect(() => {
     async function fetchEntries() {
       setLoading(true);
-      const data = await getEntries(date);
-
+      const { start, end } = getDateRange(selectedDate);
+      const data = await getEntries(start, end);
       setEntries(data?.data ?? []);
       setLoading(false);
     }
 
     fetchEntries();
-  }, [date]);
+  }, [selectedDate]);
 
   const handleDelete = async (entryId) => {
     const result = await deleteEntry(entryId);
@@ -77,11 +85,15 @@ export default function DataTable({ goal }) {
       <div>
         <div className="flex justify-center items-center">
           <h1 className="text-lg font-medium">
-            Entries for {date ? date.toDateString() : "No date selected."}
+            Entries for {selectedDate.toLocaleDateString()}
           </h1>
         </div>
         <div className="flex justify-center items-center">
-          <Calendar mode="single" selected={date} onSelect={setDate} />
+          <Calendar
+            mode="single"
+            selected={selectedDate}
+            onSelect={(date) => setSelectedDate(date || new Date())}
+          />
         </div>
       </div>
       {loading ? (
